@@ -1,0 +1,454 @@
+* {
+	box-sizing: border-box;
+}
+
+body,
+html {
+	margin: 0;
+	padding: 20px; /* 모든 방향으로 20px의 여백을 줍니다. */
+	font-family: "Noto Sans KR", sans-serif;
+	height: 100vh;
+}
+
+#container {
+	display: flex;
+	min-height: calc(100vh - 40px); /* body의 상하 패딩(20px*2)을 뺀 높이 */
+	overflow: hidden; /* container 자체의 스크롤은 없도록 유지 */
+	background-color: #fff; /* 컨테이너 배경색을 흰색으로 지정 (여백 색과 구분) */
+	border-radius: 8px; /* 컨테이너 모서리를 둥글게 */
+	box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+#main-content {
+	width: 60%;
+	padding: 20px;
+	overflow-y: auto;
+	border-right: 1px solid #ddd;
+}
+
+#cart {
+	width: 40%;
+	padding: 20px;
+	overflow-y: auto;
+	background: #f9f9f9;
+	border-left: 1px solid #ddd;
+}
+
+#searchForm {
+	margin-bottom: 20px;
+	display: flex;
+	gap: 10px;
+}
+
+#searchForm input,
+#searchForm select,
+#searchForm button {
+	padding: 10px;
+	font-size: 1rem;
+}
+
+/* 정렬 버튼 컨테이너 */
+#sort-buttons {
+	margin-bottom: 20px;
+	display: flex;
+	gap: 5px; /* 버튼 사이 간격 */
+	border-bottom: 1px solid #ddd; /* 하단 구분선 */
+}
+
+/* 개별 정렬 버튼 */
+.sort-btn {
+	padding: 10px 15px;
+	background-color: #f0f0f0;
+	border: 1px solid #ddd;
+	border-bottom: none; /* 하단 테두리는 없앰 */
+	cursor: pointer;
+	font-size: 0.9rem;
+	color: #555;
+	transition: all 0.2s ease;
+	flex-grow: 1; /* 모든 버튼이 공간을 균등하게 차지 */
+	text-align: center;
+}
+
+.sort-btn:hover {
+	background-color: #e0e0e0;
+	color: #333;
+}
+
+/* 선택된 정렬 버튼 */
+.sort-btn.active {
+	background-color: white; /* 선택되면 흰색 배경 */
+	border-top: 2px solid #4285f4; /* 상단 강조 */
+	border-left-color: #4285f4; /* 좌우 테두리 색상 변경 */
+	border-right-color: #4285f4;
+	color: #4285f4; /* 텍스트 색상 변경 */
+	font-weight: bold;
+	transform: translateY(1px); /* 약간 아래로 내려가서 선택된 느낌 */
+}
+
+/* 상품 개별 컨테이너 */
+.product {
+	display: flex; /* Flexbox를 사용하여 내부 요소들을 정렬 */
+	align-items: center; /* 세로 중앙 정렬 */
+	border: 1px solid #ddd;
+	margin-bottom: 10px;
+	padding: 10px;
+	gap: 10px; /* 이미지, 정보, 액션 버튼 사이 간격 */
+}
+
+.product img {
+	width: 80px;
+	height: 80px;
+	object-fit: contain;
+	border: 1px solid #ccc;
+	flex-shrink: 0; /* 이미지가 줄어들지 않도록 */
+}
+
+.product .info {
+	flex-grow: 1; /* 정보 섹션이 가능한 공간을 모두 차지하도록 */
+}
+
+.product .info h3 {
+	margin: 0 0 5px 0;
+	font-size: 1.1rem;
+}
+
+/* 상품 설명 2줄 제한 및 말줄임표 */
+.product .info p {
+	margin: 2px 0;
+	font-size: 0.9rem;
+	display: -webkit-box; /* 웹킷 기반 브라우저용 */
+	-webkit-line-clamp: 2; /* 2줄로 제한 */
+	-webkit-box-orient: vertical; /* 세로 방향으로 정렬 */
+	overflow: hidden; /* 넘치는 내용 숨김 */
+	text-overflow: ellipsis; /* 말줄임표(...) 표시 */
+	white-space: normal; /* 단어 단위 줄바꿈 허용 */
+	cursor: pointer; /* 클릭 가능하다는 표시 */
+}
+
+/* 상품 설명을 클릭했을 때의 스타일 (선택사항) */
+.product .info p:hover {
+	color: #007bff; /* 호버 시 색상 변경 */
+	text-decoration: underline; /* 밑줄 */
+}
+
+/* 가격과 담기 버튼을 묶는 컨테이너 */
+.product-actions {
+	display: flex;
+	flex-direction: column; /* 가격과 버튼을 세로로 쌓음 */
+	align-items: flex-end; /* 오른쪽 정렬 */
+	gap: 5px; /* 가격과 버튼 사이 간격 */
+	flex-shrink: 0; /* 이 섹션이 줄어들지 않도록 */
+}
+
+.product-actions strong {
+	font-size: 1.2rem; /* 가격 글씨 크기 */
+	color: #333333; /* 가격 색상 변경 */
+	white-space: nowrap; /* 가격이 줄바꿈되지 않도록 */
+}
+
+.product-actions button {
+	padding: 5px 10px;
+	cursor: pointer;
+	background-color: white; /* 버튼 배경 흰색 */
+	border: 1px solid #ddd; /* 테두리 */
+	color: #333; /* 텍스트 색상 */
+	font-size: 0.9rem;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+.product-actions button:hover {
+	background-color: #f0f0f0; /* 호버 시 배경색 */
+	border-color: #bbb;
+}
+
+#cart h2 {
+	margin-top: 0;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 10px;
+}
+
+/* PC 주요구성 아코디언 컨테이너 스타일 */
+.accordion-category {
+	border: 1px solid #ccc;
+	margin-bottom: 10px;
+	background: #fff;
+	border-radius: 5px;
+}
+
+/* PC 주요구성 아코디언 헤더 */
+.accordion-header {
+	background: none; /* 배경색 없음 */
+	color: #333;
+	cursor: pointer;
+	padding: 10px;
+	user-select: none;
+	font-weight: 700;
+	border-radius: 5px 5px 0 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 1px solid #ddd; /* 하단 구분선 */
+}
+
+/* 메인 아코디언 헤더의 꺽쇠 */
+.accordion-header::after {
+	content: "\2303"; /* 위쪽 화살표 (닫힘) */
+	font-size: 1.2rem;
+	color: #555;
+	transition: transform 0.3s ease;
+	transform: rotate(0deg); /* 기본 상태 */
+}
+
+/* 메인 아코디언이 열렸을 때 꺽쇠 회전 */
+.accordion-header.open::after {
+	content: "\2304"; /* 아래쪽 화살표 (열림) */
+	transform: rotate(180deg);
+}
+
+/* PC 주요구성 아코디언 콘텐츠 스타일 */
+#pc-main-accordion-content {
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease;
+	padding: 0; /* 초기 패딩 0 */
+	border: 1px solid #ccc;
+	border-top: none;
+	border-radius: 0 0 5px 5px;
+}
+
+#pc-main-accordion-content.open {
+	max-height: 2000px; /* 충분히 큰 값 */
+	padding: 10px; /* 열렸을 때 패딩 적용 */
+}
+
+/* 각 세부 카테고리 블록 (CPU, 쿨러/튜닝 각각의 덩어리) */
+.pc-main-category-block {
+	margin-bottom: 10px; /* 각 카테고리 블록 사이 간격 */
+	border: 1px solid #eee; /* 아주 연한 테두리 */
+	border-radius: 5px;
+	overflow: hidden; /* 자식 요소의 둥근 모서리 적용을 위해 */
+}
+
+.pc-main-category-block:last-of-type {
+	margin-bottom: 0; /* 마지막 블록은 하단 간격 없음 */
+}
+
+/* 세부 카테고리 헤더 (CPU, 쿨러/튜닝 등) - 기본 흰색 배경 */
+.category-header {
+	background: #ffffff; /* 흰색 배경 */
+	color: #333; /* 기본 텍스트 색상 */
+	padding: 10px 15px;
+	cursor: pointer;
+	user-select: none;
+	font-weight: 700;
+	font-size: 1rem;
+	transition: background 0.2s ease, color 0.2s ease; /* 전환 효과 추가 */
+	border-bottom: 1px solid #eee; /* 하단 구분선 */
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* 세부 카테고리 헤더의 꺽쇠 */
+.category-header::after {
+	content: "\276F"; /* 오른쪽 화살표 */
+	font-size: 1rem;
+	color: #777;
+}
+
+.category-header:hover {
+	background: #f0f0f0; /* 호버 시 약간 밝은 회색 */
+}
+
+/* 선택된 카테고리 헤더 - 빨간색 배경 */
+.category-header.active {
+	background: #553de8; /* 카테고리 색상 변경 */
+	color: white; /* 텍스트 흰색 */
+	border-bottom-color: #553de8; /* 선택되면 하단 구분선도 변경 */
+}
+
+.category-header.active::after {
+	color: white;
+}
+
+/* 각 카테고리별 상품 목록을 담을 div */
+.product-list-for-category {
+	background: #fff; /* 배경색 */
+	padding: 10px; /* 상품 목록 내부 패딩 */
+}
+
+/* 장바구니 개별 상품 항목 스타일 */
+.cart-item-display {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 8px 0;
+	border-bottom: 1px dashed #eee; /* 상품 간 구분선 */
+}
+
+.cart-item-display:last-of-type {
+	border-bottom: none; /* 마지막 상품은 구분선 없음 */
+}
+
+.product-name-display {
+	flex-grow: 1; /* 상품명이 남은 공간을 차지하도록 */
+	font-size: 0.95rem;
+	color: #333;
+	padding-right: 10px; /* 이름과 컨트롤 사이 간격 */
+}
+
+.controls-wrapper-display {
+	display: flex;
+	align-items: center;
+	gap: 10px; /* 수량, 가격, 삭제 버튼 사이 간격 */
+	flex-shrink: 0; /* 공간이 부족해도 줄어들지 않음 */
+}
+
+.qty-controls-display {
+	display: flex;
+	align-items: center;
+	border: 1px solid #ddd; /* 수량 컨트롤 전체 테두리 */
+	border-radius: 3px;
+	overflow: hidden; /* 버튼 모서리 처리 */
+}
+
+.qty-controls-display button {
+	width: 28px; /* 버튼 너비 */
+	height: 28px; /* 버튼 높이 */
+	padding: 0;
+	border: none; /* 내부 버튼 테두리 없음 */
+	background: #f8f8f8;
+	font-size: 1rem;
+	line-height: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	color: #555;
+	transition: background 0.2s ease;
+}
+
+.qty-controls-display button:hover {
+	background: #e0e0e0;
+}
+
+.qty-controls-display span {
+	font-size: 0.95rem;
+	min-width: 25px; /* 수량 숫자 최소 너비 */
+	text-align: center;
+	color: #333;
+	font-weight: 500;
+}
+
+.price-display {
+	font-size: 1rem;
+	font-weight: bold;
+	color: #333;
+	min-width: 80px; /* 가격 영역 최소 너비 */
+	text-align: right;
+}
+
+.delete-button-display {
+	background: none;
+	border: none;
+	color: #999;
+	font-size: 1.2rem;
+	cursor: pointer;
+	padding: 0;
+	transition: color 0.2s ease;
+}
+
+.delete-button-display:hover {
+	color: #e53935;
+}
+
+/* 장바구니 총 견적 금액 스타일 */
+.cart-total {
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid #ccc;
+	text-align: right;
+	font-size: 1.2rem;
+	font-weight: bold;
+	color: #333;
+}
+
+.cart-total h3 {
+	margin: 0;
+	font-size: 1.2rem;
+}
+
+/* ==================================== */
+/* 상품 설명 팝업 스타일 */
+/* ==================================== */
+.spec-popup-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.6); /* 반투명 배경 */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000; /* 다른 요소들 위에 표시 */
+	visibility: hidden; /* 초기에는 숨김 */
+	opacity: 0; /* 초기에는 투명 */
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.spec-popup-overlay.visible {
+	visibility: visible;
+	opacity: 1;
+}
+
+.spec-popup-content {
+	background: white;
+	padding: 25px;
+	border-radius: 8px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+	width: 90%;
+	max-width: 500px; /* 최대 너비 */
+	max-height: 80vh; /* 최대 높이 */
+	overflow-y: auto; /* 내용이 길면 스크롤 */
+	position: relative;
+	transform: scale(0.9); /* 초기 크기 작게 */
+	transition: transform 0.3s ease;
+}
+
+.spec-popup-overlay.visible .spec-popup-content {
+	transform: scale(1); /* 팝업 시 원본 크기로 */
+}
+
+.spec-popup-content h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+	color: #333;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	font-size: 1.3rem;
+}
+
+.spec-popup-content p {
+	font-size: 1rem;
+	line-height: 1.6;
+	color: #555;
+	white-space: pre-wrap; /* 공백과 줄바꿈 유지 */
+}
+
+.spec-popup-close-btn {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	background: none;
+	border: none;
+	font-size: 1.8rem;
+	color: #999;
+	cursor: pointer;
+	line-height: 1;
+	transition: color 0.2s ease;
+}
+
+.spec-popup-close-btn:hover {
+	color: #333;
+}
