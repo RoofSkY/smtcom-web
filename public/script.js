@@ -1,3 +1,5 @@
+// public/script.js
+
 let cart = [];
 
 const pcMainCategories = [
