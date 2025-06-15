@@ -9,6 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalEstimatePriceElement = document.getElementById('total-estimate-price');
     const paginationElement = document.querySelector('.pagination');
 
+    // --- 모달 관련 DOM 요소 추가 ---
+    const specModal = document.getElementById('spec-modal');
+    const modalProductName = document.getElementById('modal-product-name');
+    const modalProductSpec = document.getElementById('modal-product-spec');
+    const closeButton = document.querySelector('.close-button');
+    // ---------------------------------
+
     let currentMainCategory = "PC 주요구성"; // 초기값
     let currentSubCategoryName = "CPU"; // 초기값
     let currentSearchKeyword = "";
@@ -17,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPageNum = "1";
 
     const selectedComponents = {}; // 선택된 부품들을 저장할 객체
-    let expandedCategories = new Set(); // <--- 추가: 확장된 카테고리 이름을 저장할 Set
+    let expandedCategories = new Set(); // 확장된 카테고리 이름을 저장할 Set
 
     // 카테고리 데이터를 서버에서 가져오는 함수 (또는 클라이언트 측에 내장)
     // 여기서는 간단히 내장된 데이터를 사용한다고 가정합니다.
@@ -122,12 +129,50 @@ document.addEventListener('DOMContentLoaded', () => {
                         data-price="${product.price}">담기</button>
                 `;
                 productListElement.appendChild(productItem);
+
+                // 상품 설명을 클릭하면 전체 설명 팝업 (모달)
+                const specElement = productItem.querySelector('.spec');
+                specElement.addEventListener('click', () => {
+                    openModal(product.name, product.spec);
+                });
             });
         } catch (error) {
             console.error("상품을 가져오는 중 오류 발생:", error);
             productListElement.innerHTML = '<p>상품을 로드하는 데 실패했습니다.</p>';
         }
     }
+
+    // 모달을 열고 내용을 채우는 함수
+    function openModal(productName, productSpec) {
+        modalProductName.textContent = productName;
+        modalProductSpec.textContent = productSpec; // pre 태그 안에 텍스트를 넣습니다.
+        specModal.style.display = 'flex'; // 모달을 보이게 함 (CSS에서 flex로 중앙 정렬)
+        document.body.style.overflow = 'hidden'; // 스크롤 방지
+    }
+
+    // 모달을 닫는 함수
+    function closeModal() {
+        specModal.style.display = 'none'; // 모달을 숨김
+        document.body.style.overflow = ''; // 스크롤 허용
+    }
+
+    // 닫기 버튼 클릭 시 모달 닫기
+    closeButton.addEventListener('click', closeModal);
+
+    // 모달 외부 클릭 시 모달 닫기
+    specModal.addEventListener('click', (event) => {
+        if (event.target === specModal) {
+            closeModal();
+        }
+    });
+
+    // ESC 키를 눌렀을 때 모달 닫기
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && specModal.style.display === 'flex') {
+            closeModal();
+        }
+    });
+
 
     // 총 합계 금액 업데이트 함수
     function updateTotalEstimatePrice() {
@@ -205,14 +250,12 @@ document.addEventListener('DOMContentLoaded', () => {
             groupHeader.addEventListener('click', () => {
                 groupDiv.classList.toggle('expanded');
                 groupHeader.classList.toggle('collapsed');
-                // <--- 수정 시작
                 // 확장/축소 상태를 Set에 저장/제거
                 if (groupDiv.classList.contains('expanded')) {
                     expandedCategories.add(mainCatName);
                 } else {
                     expandedCategories.delete(mainCatName);
                 }
-                // <--- 수정 끝
             });
         }
         updateTotalEstimatePrice();
