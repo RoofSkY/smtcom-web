@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const products = await response.json();
-            productListElement.innerHTML = ''; // 기존 목록 초기화
+            productListElement.innerHTML = '';
 
             if (products.length === 0) {
                 productListElement.innerHTML = '<p>검색 결과가 없습니다.</p>';
@@ -118,19 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
                     <img src="${product.image}" alt="${product.name}">
-                    <div class="product-info"> <h4>${product.name}</h4>
+                    <div class="product-info">
+                        <h4>${product.name}</h4>
                         <p class="spec">${product.spec}</p>
                     </div>
-                    <p class="price">${parseInt(product.price).toLocaleString()} 원</p>
-                    <button class="add-button"
-                        data-category="${product.category}"
-                        data-subcategory="${product.subCategory}"
-                        data-name="${product.name}"
-                        data-price="${product.price}">담기</button>
+                    <div class="price-add-container">  <p class="price">${parseInt(product.price).toLocaleString()} 원</p>
+                        <button class="add-button"
+                            data-category="${product.category}"
+                            data-subcategory="${product.subCategory}"
+                            data-name="${product.name}"
+                            data-price="${product.price}">견적담기</button> </div>
                 `;
                 productListElement.appendChild(productItem);
 
-                // 상품 설명을 클릭하면 전체 설명 팝업 (모달)
                 const specElement = productItem.querySelector('.spec');
                 specElement.addEventListener('click', () => {
                     openModal(product.name, product.spec);
