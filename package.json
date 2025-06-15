@@ -1,0 +1,15 @@
+{
+	"name": "pc-estimate-site",
+	"version": "1.0.0",
+	"description": "PC Estimate Site",
+	"main": "server/server.js",
+	"scripts": {
+		"start": "node server/server.js"
+	},
+	"dependencies": {
+		"axios": "^1.x.x",
+		"cheerio": "^1.0.0-rc.x",
+		"express": "^4.x.x",
+		"iconv-lite": "^0.6.x"
+	}
+}

@@ -1,0 +1,335 @@
+/* public/style.css */
+
+body {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	margin: 0;
+	padding: 0;
+	background-color: #f4f7f6;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.header {
+	background-color: #fff;
+	padding: 15px 20px;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar {
+	display: flex;
+	align-items: center;
+}
+
+.search-bar input {
+	border: 1px solid #ddd;
+	padding: 8px 12px;
+	border-radius: 4px;
+	width: 250px;
+	margin-right: 10px;
+}
+
+.search-bar button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	padding: 8px 15px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.search-bar button:hover {
+	background-color: #0056b3;
+}
+
+.tabs .tab-button {
+	background-color: #f0f0f0;
+	border: 1px solid #ddd;
+	padding: 8px 15px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	margin-left: 5px;
+	border-radius: 4px;
+}
+
+.tabs .tab-button.active {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.main-container {
+	display: flex;
+	flex: 1;
+	padding: 20px;
+	gap: 20px;
+}
+
+.product-list-container {
+	flex: 3;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.product-list-header {
+	display: flex;
+	justify-content: flex-start;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 10px;
+	margin-bottom: 20px;
+}
+
+.product-list-header .sort-button {
+	background-color: transparent;
+	border: none;
+	padding: 8px 12px;
+	cursor: pointer;
+	font-size: 15px;
+	color: #555;
+	transition: color 0.2s ease;
+}
+
+.product-list-header .sort-button.active {
+	color: #007bff;
+	font-weight: bold;
+	border-bottom: 2px solid #007bff;
+}
+
+.product-list {
+	display: grid;
+	grid-template-columns: repeat(
+		auto-fill,
+		minmax(280px, 1fr)
+	); /* 300px에서 280px로 변경 */
+	gap: 20px;
+	padding: 10px;
+}
+
+.product-item {
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #fff;
+	transition: box-shadow 0.2s ease;
+}
+
+.product-item:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-item img {
+	max-width: 120px; /* 이미지 크기 조정 */
+	max-height: 120px;
+	object-fit: contain;
+	margin-bottom: 15px;
+}
+
+.product-item h4 {
+	font-size: 16px;
+	margin: 0 0 8px 0;
+	text-align: center;
+	line-height: 1.4;
+	height: 4em; /* 두 줄까지 표시하도록 높이 설정 */
+	overflow: hidden; /* 넘치는 텍스트 숨김 */
+	text-overflow: ellipsis; /* 넘치는 텍스트에 ... 표시 */
+}
+
+.product-item .spec {
+	font-size: 13px;
+	color: #666;
+	text-align: center;
+	margin-bottom: 10px;
+	height: 3em; /* 사양도 적절히 높이 지정 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.product-item .price {
+	font-size: 18px;
+	font-weight: bold;
+	color: #e44d26;
+	margin-bottom: 15px;
+}
+
+.product-item .add-button {
+	background-color: #28a745;
+	color: white;
+	border: none;
+	padding: 8px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.product-item .add-button:hover {
+	background-color: #218838;
+}
+
+.pagination {
+	display: flex;
+	justify-content: center;
+	margin-top: 30px;
+	gap: 5px;
+}
+
+.pagination .page-button {
+	background-color: #fff;
+	border: 1px solid #ddd;
+	padding: 8px 12px;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.pagination .page-button.active,
+.pagination .page-button:hover {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+.estimate-sidebar {
+	flex: 1;
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	max-width: 350px; /* 사이드바 최대 너비 지정 */
+	min-width: 300px;
+}
+
+.estimate-sidebar h3 {
+	font-size: 20px;
+	color: #333;
+	margin-top: 0;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.estimate-category-group {
+	margin-bottom: 15px;
+	border: 1px solid #eee;
+	border-radius: 4px;
+	overflow: hidden; /* border-radius 적용을 위해 */
+}
+
+.estimate-category-group h4 {
+	background-color: #f8f8f8;
+	padding: 10px 15px;
+	margin: 0;
+	font-size: 16px;
+	color: #333;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: background-color 0.2s ease;
+}
+
+.estimate-category-group h4:hover {
+	background-color: #efefef;
+}
+
+.estimate-category-group h4 .toggle-icon {
+	font-size: 18px;
+	transition: transform 0.3s ease;
+}
+
+.estimate-category-group h4.collapsed .toggle-icon {
+	transform: rotate(-90deg);
+}
+
+.estimate-sub-categories {
+	padding: 0px 15px; /* 초기 padding-top 제거 */
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.estimate-category-group.expanded .estimate-sub-categories {
+	max-height: 500px; /* 충분히 큰 값으로 설정하여 내용이 다 보이도록 */
+	padding: 10px 15px;
+}
+
+.estimate-sub-category h5 {
+	font-size: 15px;
+	color: #555;
+	margin: 10px 0 5px 0;
+	border-bottom: 1px dotted #eee;
+	padding-bottom: 5px;
+}
+
+.selected-items-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.selected-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #f9f9f9;
+	border: 1px solid #eee;
+	padding: 8px 10px;
+	margin-bottom: 5px;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+.selected-item .item-info {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+
+.selected-item .item-name {
+	font-weight: bold;
+	color: #333;
+}
+
+.selected-item .item-price {
+	color: #666;
+	font-size: 13px;
+}
+
+.selected-item .remove-button {
+	background-color: #dc3545;
+	color: white;
+	border: none;
+	padding: 4px 8px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 12px;
+	margin-left: 10px;
+	transition: background-color 0.2s ease;
+}
+
+.selected-item .remove-button:hover {
+	background-color: #c82333;
+}
+
+.total-price-section {
+	border-top: 2px solid #eee;
+	padding-top: 15px;
+	margin-top: 20px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 20px;
+	font-weight: bold;
+	color: #333;
+}
+
+#total-estimate-price {
+	color: #e44d26;
+}

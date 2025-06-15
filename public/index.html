@@ -1,0 +1,68 @@
+<!-- public/index.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>PC 견적 구성</title>
+		<link rel="stylesheet" href="/style.css" />
+	</head>
+	<body>
+		<div class="header">
+			<div class="search-bar">
+				<input
+					type="text"
+					id="product-search-input"
+					placeholder="상품명 검색" />
+				<button id="search-button">검색</button>
+			</div>
+			<div class="tabs">
+				<button class="tab-button active">상품별 견적</button>
+				<button class="tab-button">전체 견적</button>
+			</div>
+		</div>
+
+		<div class="main-container">
+			<div class="product-list-container">
+				<div class="product-list-header">
+					<button
+						class="sort-button active"
+						data-order="C.pd_suggest desc,C.pd_sold desc">
+						인기상품순
+					</button>
+					<button class="sort-button" data-order="pd_date desc">
+						최신상품순
+					</button>
+					<button
+						class="sort-button"
+						data-order="C.pd_sobija_price asc">
+						낮은가격순
+					</button>
+					<button
+						class="sort-button"
+						data-order="C.pd_sobija_price desc">
+						높은가격순
+					</button>
+				</div>
+				<div id="product-list" class="product-list"></div>
+				<div class="pagination">
+					<button class="page-button" data-page="1">1</button>
+					<button class="page-button" data-page="2">2</button>
+					<button class="page-button" data-page="3">3</button>
+				</div>
+			</div>
+
+			<div class="estimate-sidebar">
+				<h3>PC 구성</h3>
+				<div id="estimate-categories"></div>
+				<div class="total-price-section">
+					<span>총 합계금액:</span>
+					<span id="total-estimate-price">0 원</span>
+				</div>
+			</div>
+		</div>
+
+		<script src="/script.js"></script>
+	</body>
+</html>
