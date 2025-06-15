@@ -287,12 +287,12 @@ body {
 .estimate-sub-categories {
 	padding: 0px 15px;
 	max-height: 0;
-	overflow: hidden;
+	overflow: hidden; /* 아코디언 닫혔을 때 숨김 */
 	transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+	/* overflow-y: auto; */ /* 이 줄은 이제 필요 없으므로 제거하거나 주석 처리 */
 }
-
 .estimate-category-group.expanded .estimate-sub-categories {
-	max-height: 500px;
+	max-height: 2000px; /* 아주 큰 값으로 설정하여 내용이 충분히 늘어나도록 합니다. */
 	padding: 10px 15px;
 }
 
