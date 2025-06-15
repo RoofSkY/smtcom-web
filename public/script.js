@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentListNum = "10";
     let currentPageNum = "1";
 
-    const selectedComponents = {}; // 선택된 부품들을 저장할 객체
+    // selectedComponents 객체 구조 변경: 각 항목에 quantity 추가
+    const selectedComponents = {}; // { mainCategory: { subCategory: [{ id, name, price, quantity }] } }
     let expandedCategories = new Set(); // 확장된 카테고리 이름을 저장할 Set
 
     // 카테고리 데이터를 서버에서 가져오는 함수 (또는 클라이언트 측에 내장)
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const category in selectedComponents) {
             for (const subCategory in selectedComponents[category]) {
                 selectedComponents[category][subCategory].forEach(item => {
-                    total += parseInt(item.price);
+                    total += parseInt(item.price) * item.quantity; // 수량 반영
                 });
             }
         }
@@ -197,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const groupDiv = document.createElement('div');
             groupDiv.className = 'estimate-category-group';
             // 이전에 확장되었던 카테고리인지 확인하고 클래스 추가
-            if (expandedCategories.has(mainCatName)) { // <--- 수정
+            if (expandedCategories.has(mainCatName)) {
                 groupDiv.classList.add('expanded');
             }
 
@@ -206,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${mainCatName} <span class="toggle-icon">▼</span>
             `;
             // 이전에 확장되었던 카테고리인지 확인하고 클래스 추가
-            if (!expandedCategories.has(mainCatName)) { // <--- 수정
+            if (!expandedCategories.has(mainCatName)) {
                 groupHeader.classList.add('collapsed'); // 기본적으로 접힌 상태
             }
             groupDiv.appendChild(groupHeader);
@@ -234,7 +235,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         listItem.innerHTML = `
                             <div class="item-info">
                                 <span class="item-name">${item.name}</span>
-                                <span class="item-price">${parseInt(item.price).toLocaleString()} 원</span>
+                                <span class="item-price">${parseInt(item.price * item.quantity).toLocaleString()} 원</span>
+                            </div>
+                            <div class="item-quantity-controls">
+                                <button class="quantity-button decrease"
+                                    data-item-id="${item.id}"
+                                    data-category="${mainCatName}"
+                                    data-subcategory="${subCat.name}">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-button increase"
+                                    data-item-id="${item.id}"
+                                    data-category="${mainCatName}"
+                                    data-subcategory="${subCat.name}">+</button>
                             </div>
                             <button class="remove-button" data-item-id="${item.id}"
                                 data-category="${mainCatName}" data-subcategory="${subCat.name}">X</button>
@@ -289,7 +301,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const subCategory = button.dataset.subcategory;
             const name = button.dataset.name;
             const price = button.dataset.price;
-            const id = Date.now().toString(); // 고유 ID 생성 (간단한 예시)
 
             if (!selectedComponents[category]) {
                 selectedComponents[category] = {};
@@ -298,26 +309,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectedComponents[category][subCategory] = [];
             }
 
-            // 중복 방지 (예: CPU는 하나만 담기도록) - 필요시 로직 추가
-            // if (subCategory === "CPU" && selectedComponents[category][subCategory].length > 0) {
-            //     alert("CPU는 하나만 선택할 수 있습니다.");
-            //     return;
-            // }
+            // 동일한 이름의 상품이 이미 담겨있는지 확인
+            const existingItem = selectedComponents[category][subCategory].find(item => item.name === name);
 
-            selectedComponents[category][subCategory].push({ id, name, price });
+            if (existingItem) {
+                // 이미 있다면 수량만 증가
+                existingItem.quantity += 1;
+            } else {
+                // 없다면 새로 추가 (quantity: 1)
+                const id = Date.now().toString(); // 고유 ID 생성 (간단한 예시)
+                selectedComponents[category][subCategory].push({ id, name, price, quantity: 1 });
+            }
             renderEstimateSidebar(); // 사이드바 다시 렌더링하여 변경사항 반영
         }
     });
 
-    // 선택된 항목 제거 버튼 클릭 (이벤트 위임)
+    // 선택된 항목 제거 및 수량 조절 버튼 클릭 (이벤트 위임)
     estimateCategoriesElement.addEventListener('click', (event) => {
         if (event.target.classList.contains('remove-button')) {
             const button = event.target;
             const itemIdToRemove = button.dataset.itemId;
-            const category = button.dataset.category; // <--- 추가
-            const subCategory = button.dataset.subcategory; // <--- 추가
+            const category = button.dataset.category;
+            const subCategory = button.dataset.subcategory;
 
-            // <--- 수정 시작
             if (selectedComponents[category] && selectedComponents[category][subCategory]) {
                 selectedComponents[category][subCategory] = selectedComponents[category][subCategory].filter(item => item.id !== itemIdToRemove);
                 // 만약 해당 서브카테고리에 아이템이 하나도 없으면 서브카테고리 객체에서 제거
@@ -329,8 +343,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            // <--- 수정 끝
             renderEstimateSidebar(); // 사이드바 다시 렌더링
+        } else if (event.target.classList.contains('quantity-button')) {
+            const button = event.target;
+            const itemIdToModify = button.dataset.itemId;
+            const category = button.dataset.category;
+            const subCategory = button.dataset.subcategory;
+            const action = button.classList.contains('increase') ? 'increase' : 'decrease';
+
+            if (selectedComponents[category] && selectedComponents[category][subCategory]) {
+                const itemIndex = selectedComponents[category][subCategory].findIndex(item => item.id === itemIdToModify);
+
+                if (itemIndex !== -1) {
+                    if (action === 'increase') {
+                        selectedComponents[category][subCategory][itemIndex].quantity += 1;
+                    } else if (action === 'decrease') {
+                        if (selectedComponents[category][subCategory][itemIndex].quantity > 1) {
+                            selectedComponents[category][subCategory][itemIndex].quantity -= 1;
+                        } else {
+                            // 수량이 1인데 감소 버튼을 누르면 항목 제거
+                            selectedComponents[category][subCategory].splice(itemIndex, 1);
+                            if (selectedComponents[category][subCategory].length === 0) {
+                                delete selectedComponents[category][subCategory];
+                                if (Object.keys(selectedComponents[category]).length === 0) {
+                                    delete selectedComponents[category];
+                                }
+                            }
+                        }
+                    }
+                    renderEstimateSidebar(); // 수량 변경 후 사이드바 다시 렌더링
+                }
+            }
         }
     });
 

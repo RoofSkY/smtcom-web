@@ -326,6 +326,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
+	margin-right: 10px; /* 수량 조절 버튼과의 간격 */
 }
 
 .selected-item .item-name {
@@ -336,6 +337,50 @@ body {
 .selected-item .item-price {
 	color: #666;
 	font-size: 13px;
+	white-space: nowrap; /* 가격이 줄바꿈되지 않도록 */
+}
+
+/* 수량 조절 컨테이너 */
+.item-quantity-controls {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	flex-shrink: 0; /* 줄어들지 않도록 */
+}
+
+.quantity-button {
+	background-color: #f0f0f0;
+	border: 1px solid #ddd;
+	color: #555;
+	padding: 2px 6px;
+	border-radius: 3px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.quantity-button:hover {
+	background-color: #e0e0e0;
+	border-color: #ccc;
+}
+
+.quantity-button.decrease:hover {
+	background-color: #ffcccc;
+	border-color: #ff9999;
+	color: #c82333;
+}
+
+.quantity-button.increase:hover {
+	background-color: #ccffcc;
+	border-color: #99ff99;
+	color: #218838;
+}
+
+.quantity-display {
+	min-width: 20px;
+	text-align: center;
+	font-weight: bold;
+	color: #333;
 }
 
 .selected-item .remove-button {
@@ -348,6 +393,7 @@ body {
 	font-size: 12px;
 	margin-left: 10px;
 	transition: background-color 0.2s ease;
+	flex-shrink: 0; /* 줄어들지 않도록 */
 }
 
 .selected-item .remove-button:hover {
