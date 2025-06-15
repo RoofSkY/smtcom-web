@@ -221,6 +221,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 subCatDiv.className = 'estimate-sub-category';
                 subCatDiv.innerHTML = `<h5>${subCat.name}</h5>`;
 
+                // --- 서브 카테고리 이름 클릭 이벤트 추가 시작 ---
+                const subCatNameElement = subCatDiv.querySelector('h5');
+                subCatNameElement.style.cursor = 'pointer'; // 클릭 가능한 시각적 표시
+                subCatNameElement.addEventListener('click', () => {
+                    currentMainCategory = mainCatName;
+                    // isGroup인 경우, 해당 그룹의 첫 번째 서브 카테고리로 설정
+                    if (subCat.isGroup && subCat.subCategories && subCat.subCategories.length > 0) {
+                        currentSubCategoryName = subCat.subCategories[0].name;
+                    } else {
+                        currentSubCategoryName = subCat.name;
+                    }
+                    currentSearchKeyword = ""; // 카테고리 변경 시 검색 키워드 초기화
+                    searchInput.value = ""; // 검색 입력 필드 초기화
+                    currentPageNum = "1"; // 카테고리 변경 시 첫 페이지로
+                    currentListOrder = "C.pd_suggest desc,C.pd_sold desc"; // 카테고리 변경 시 인기상품순으로 초기화
+
+                    // 모든 정렬 버튼의 active 클래스 제거 후 인기상품순 버튼에 active 클래스 추가
+                    sortButtons.forEach(btn => btn.classList.remove('active'));
+                    const popularSortButton = document.querySelector('.sort-button[data-order="C.pd_suggest desc,C.pd_sold desc"]');
+                    if (popularSortButton) {
+                        popularSortButton.classList.add('active');
+                    }
+                    // 모든 페이지 버튼의 active 클래스를 제거하고 첫 번째 페이지 버튼에만 추가
+                    document.querySelectorAll('.page-button').forEach(btn => btn.classList.remove('active'));
+                    const initialPageButton = paginationElement.querySelector(`.page-button[data-page="1"]`);
+                    if (initialPageButton) {
+                        initialPageButton.classList.add('active');
+                    }
+
+
+                    renderProducts(); // 상품 목록 다시 로드
+                });
+                // --- 서브 카테고리 이름 클릭 이벤트 추가 끝 ---
+
+
                 const selectedItemsList = document.createElement('ul');
                 selectedItemsList.className = 'selected-items-list';
                 selectedItemsList.id = `list-${mainCatName}-${subCat.name.replace(/\s/g, '-')}`;
