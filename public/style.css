@@ -159,10 +159,11 @@ body {
 	color: #666;
 	text-align: left; /* 텍스트 왼쪽 정렬 */
 	margin-bottom: 5px; /* 마진 조정 */
-	height: auto; /* 높이 제한 해제 */
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap; /* 한 줄로 표시 */
+	display: -webkit-box; /* 웹킷 기반 브라우저를 위한 플렉스 박스 모델 */
+	-webkit-line-clamp: 1; /* 표시할 줄 수 (예: 2줄) */
+	-webkit-box-orient: vertical; /* 텍스트 방향 수직으로 설정 */
 	max-width: 100%;
 }
 
