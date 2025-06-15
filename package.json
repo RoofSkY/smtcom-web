@@ -1,7 +1,7 @@
 {
-	"name": "pc-estimate-site",
+	"name": "smtcom-web",
 	"version": "1.0.0",
-	"description": "PC Estimate Site",
+	"description": "smtcom-web",
 	"main": "server/server.js",
 	"scripts": {
 		"start": "node server/server.js"
