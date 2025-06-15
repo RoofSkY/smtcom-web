@@ -111,8 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 productItem.className = 'product-item';
                 productItem.innerHTML = `
                     <img src="${product.image}" alt="${product.name}">
-                    <h4>${product.name}</h4>
-                    <p class="spec">${product.spec}</p>
+                    <div class="product-info"> <h4>${product.name}</h4>
+                        <p class="spec">${product.spec}</p>
+                    </div>
                     <p class="price">${parseInt(product.price).toLocaleString()} 원</p>
                     <button class="add-button"
                         data-category="${product.category}"
